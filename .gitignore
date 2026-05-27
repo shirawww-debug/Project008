@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.venv/
+venv/
+
+# Données et captures — NE JAMAIS committer de données personnelles (RGPD).
+# Voir docs/ETHICS.md.
+*.pcap
+*.pcapng
+*.npz
+data/
+captures/
+datasets/
+*.pt
+*.pth

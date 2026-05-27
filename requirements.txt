@@ -1,0 +1,11 @@
+# Coeur du projet (parsing BFI + baseline ML) — tourne sans matériel ni GPU.
+numpy>=1.24
+scipy>=1.10
+scikit-learn>=1.3
+
+# Optionnel — CNN temporel (bfid/model.py) :
+#   pip install torch
+# Optionnel — lecture de pcaps (bfid/pcap.py) :
+#   pip install scapy
+# Développement :
+#   pip install pytest
