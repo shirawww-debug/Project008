@@ -44,6 +44,7 @@ def run_demo(
     window: int = 32,
     stride: int = 8,
     seed: int = 0,
+    label_prefix: str = "person",
 ) -> EvalResult:
     """Génère un dataset synthétique et évalue le baseline de bout en bout."""
     samples = synthetic.generate_dataset(
@@ -51,5 +52,6 @@ def run_demo(
         traces_per_person=traces_per_person,
         n_frames=n_frames,
         seed=seed,
+        label_prefix=label_prefix,
     )
     return evaluate_samples(samples, window=window, stride=stride, seed=seed)

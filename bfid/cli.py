@@ -40,16 +40,17 @@ def _cmd_synth(args: argparse.Namespace) -> int:
         n_frames=args.frames,
         roundtrip=not args.no_roundtrip,
         seed=args.seed,
+        label_prefix=args.mode,
     )
     save_samples(args.out, samples)
     total = sum(s.n_frames for s in samples)
-    print(f"{len(samples)} traces ({args.persons} personnes, {total} trames) "
+    print(f"{len(samples)} traces ({args.persons} {args.mode}, {total} trames) "
           f"écrites dans {args.out}")
     return 0
 
 
 def _cmd_demo(args: argparse.Namespace) -> int:
-    print(f"Démo bout-en-bout : {args.persons} personnes (données synthétiques)\n")
+    print(f"Démo bout-en-bout : {args.persons} {args.mode} (données synthétiques)\n")
     result = train.run_demo(
         n_persons=args.persons,
         traces_per_person=args.traces,
@@ -57,10 +58,31 @@ def _cmd_demo(args: argparse.Namespace) -> int:
         window=args.window,
         stride=args.stride,
         seed=args.seed,
+        label_prefix=args.mode,
     )
     print(result)
     print("\nMatrice de confusion (sommée sur les folds) :")
     print(result.confusion)
+    return 0
+
+
+def _cmd_label(args: argparse.Namespace) -> int:
+    from .labeling import label_from_journal  # import paresseux (scapy)
+
+    samples = label_from_journal(args.pcap, args.journal, has_fcs=not args.no_fcs)
+    save_samples(args.out, samples)
+    classes = sorted({s.person for s in samples})
+    print(f"{len(samples)} traces étiquetées ({len(classes)} classes : "
+          f"{', '.join(classes)}) écrites dans {args.out}")
+    return 0
+
+
+def _cmd_web(args: argparse.Namespace) -> int:
+    from .web import create_app
+
+    print(f"Interface web : http://{args.host}:{args.port}  (Ctrl+C pour arrêter)")
+    print(_ETHICS)
+    create_app().run(host=args.host, port=args.port, debug=args.debug)
     return 0
 
 
@@ -109,6 +131,8 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--traces", type=int, default=8)
     s.add_argument("--frames", type=int, default=200)
     s.add_argument("--seed", type=int, default=0)
+    s.add_argument("--mode", choices=["person", "zone"], default="person",
+                   help="person = identification, zone = localisation")
     s.add_argument("--no-roundtrip", action="store_true",
                    help="ne pas faire passer les angles par encode/parse")
     s.set_defaults(func=_cmd_synth)
@@ -120,6 +144,8 @@ def build_parser() -> argparse.ArgumentParser:
     d.add_argument("--window", type=int, default=32)
     d.add_argument("--stride", type=int, default=8)
     d.add_argument("--seed", type=int, default=0)
+    d.add_argument("--mode", choices=["person", "zone"], default="person",
+                   help="person = identification, zone = localisation")
     d.set_defaults(func=_cmd_demo)
 
     t = sub.add_parser("train", help="Évalue le baseline sur un dataset .npz")
@@ -135,6 +161,19 @@ def build_parser() -> argparse.ArgumentParser:
     pp.add_argument("--no-fcs", action="store_true",
                     help="le pcap n'a pas de FCS en fin de trame")
     pp.set_defaults(func=_cmd_parse)
+
+    lb = sub.add_parser("label", help="pcap + journal CSV -> dataset.npz étiqueté")
+    lb.add_argument("--pcap", required=True)
+    lb.add_argument("--journal", required=True, help="CSV: t_debut,t_fin,label")
+    lb.add_argument("--out", default="dataset.npz")
+    lb.add_argument("--no-fcs", action="store_true")
+    lb.set_defaults(func=_cmd_label)
+
+    w = sub.add_parser("web", help="Lance l'interface web (banc de test)")
+    w.add_argument("--host", default="127.0.0.1")
+    w.add_argument("--port", type=int, default=5000)
+    w.add_argument("--debug", action="store_true")
+    w.set_defaults(func=_cmd_web)
 
     return p
 

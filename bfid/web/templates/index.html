@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>bfid — banc de test Wi-Fi BFI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>bfid · banc de test Wi-Fi BFI</h1>
+    <p class="ethics">⚠️ Outil pédagogique. Capture passive sur <b>votre propre
+      réseau</b> uniquement, avec le <b>consentement</b> des personnes présentes.
+      Ré-identifier des tiers sans accord est exclu. Voir <code>docs/ETHICS.md</code>.</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard">Dashboard</button>
+    <button class="tab" data-tab="signatures">Signatures BFI</button>
+    <button class="tab" data-tab="pcap">Analyse pcap</button>
+  </nav>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="panel active">
+    <h2>Pipeline de bout en bout (données synthétiques)</h2>
+    <form id="demo-form" class="controls">
+      <label>Mode
+        <select name="mode">
+          <option value="person">Identification de personnes</option>
+          <option value="zones">Localisation par zones</option>
+        </select>
+      </label>
+      <label>Classes <input type="number" name="persons" value="5" min="2" max="12"></label>
+      <label>Traces/classe <input type="number" name="traces" value="8" min="2" max="30"></label>
+      <label>Trames/trace <input type="number" name="frames" value="200" min="20" max="2000"></label>
+      <label>Fenêtre <input type="number" name="window" value="32" min="4" max="256"></label>
+      <label>Pas <input type="number" name="stride" value="8" min="1" max="128"></label>
+      <label>Seed <input type="number" name="seed" value="0" min="0"></label>
+      <button type="submit">Lancer l'évaluation</button>
+    </form>
+    <div id="demo-status" class="status"></div>
+    <div id="demo-result" class="result"></div>
+  </section>
+
+  <!-- SIGNATURES -->
+  <section id="signatures" class="panel">
+    <h2>À quoi ressemble une signature BFI ?</h2>
+    <form id="sig-form" class="controls">
+      <label>Mode
+        <select name="mode">
+          <option value="person">Personne</option>
+          <option value="zones">Zone</option>
+        </select>
+      </label>
+      <label>Nb classes <input type="number" name="persons" value="5" min="2" max="12"></label>
+      <label>Index classe <input type="number" name="index" value="0" min="0" max="11"></label>
+      <label>Trames <input type="number" name="frames" value="200" min="20" max="2000"></label>
+      <label>Seed <input type="number" name="seed" value="0" min="0"></label>
+      <button type="submit">Générer</button>
+    </form>
+    <div id="sig-status" class="status"></div>
+    <div id="sig-result" class="result"></div>
+  </section>
+
+  <!-- PCAP -->
+  <section id="pcap" class="panel">
+    <h2>Analyser une vraie capture</h2>
+    <p class="hint">Capture <code>.pcap</code> de trames Action 802.11 (voir
+      <code>scripts/capture_bfi.sh</code>). Le serveur a besoin de
+      <code>scapy</code> (<code>pip install scapy</code>). Un journal CSV
+      d'étiquetage optionnel (<code>t_debut,t_fin,label</code>) déclenche
+      l'entraînement supervisé.</p>
+    <form id="pcap-form" class="controls">
+      <label>Capture .pcap <input type="file" name="pcap" accept=".pcap,.pcapng,.cap" required></label>
+      <label>Journal CSV (optionnel) <input type="file" name="journal" accept=".csv"></label>
+      <button type="submit">Analyser</button>
+    </form>
+    <div id="pcap-status" class="status"></div>
+    <div id="pcap-result" class="result"></div>
+  </section>
+
+  <footer>bfid · reproduction pédagogique (BFId, KIT/KASTEL, CCS '25)</footer>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

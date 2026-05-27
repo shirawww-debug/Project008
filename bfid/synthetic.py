@@ -103,15 +103,22 @@ def generate_dataset(
     mimo: VhtMimoControl = DEFAULT_MIMO,
     roundtrip: bool = True,
     seed: int = 0,
+    label_prefix: str = "person",
 ) -> list[BfiSample]:
-    """Génère un dataset multi-personnes, plusieurs traces chacune."""
+    """Génère un dataset multi-classes, plusieurs traces par classe.
+
+    `label_prefix` nomme les classes : "person" pour l'identification, "zone"
+    pour le fingerprinting de localisation. Le modèle de données est identique
+    (chaque classe = une signature distincte du canal) ; seule la sémantique
+    du label change.
+    """
     samples: list[BfiSample] = []
     for label in range(n_persons):
         for trace in range(traces_per_person):
             samples.append(
                 generate_sample(
                     label=label,
-                    person=f"person_{label}",
+                    person=f"{label_prefix}_{label}",
                     n_frames=n_frames,
                     mimo=mimo,
                     seed=seed * 1000 + trace,

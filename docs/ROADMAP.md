@@ -27,8 +27,17 @@
 
 ## Phase 3 — Collecte du dataset perso
 - ✅ Protocole documenté (`docs/PROTOCOL.md`).
-- ⬜ Script `label_from_journal.py` : pcap + journal CSV → `dataset.npz`.
+- ✅ Étiquetage pcap + journal CSV → dataset (`bfid/labeling.py`,
+  commande `bfid label`, logique `assign_labels` testée). 🟡 le maillon pcap
+  (scapy) reste à valider sur vraies trames.
 - ⬜ Campagne de collecte (N personnes, M trajets, multi-jours).
+
+## Interface web — `bfid/web/` (commande `bfid web`)
+- ✅ Dashboard de test (modes identification / localisation par zones).
+- ✅ Visualisation des signatures BFI (heatmaps phi/psi, séries temporelles).
+- ✅ Import + analyse de pcap, et entraînement supervisé si journal CSV fourni.
+- ⬜ Mode capture « live » (lecture directe d'une interface monitor).
+- ⬜ Persistance des datasets/résultats entre sessions.
 
 ## Phase 4 — Modèle perso
 - ⬜ Entraînement CNN sur données réelles, courbes accuracy/loss.

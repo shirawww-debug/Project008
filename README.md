@@ -45,6 +45,8 @@ capture 802.11  ->  parsing angles BFI  ->  features  ->  modèle ML  ->  identi
 | Baseline scikit-learn (CV groupée) | `bfid/baseline.py` | ✅ runnable |
 | CNN temporel PyTorch | `bfid/model.py` | ✅ (torch optionnel) |
 | Lecteur pcap (scapy) | `bfid/pcap.py` | 🟡 à valider sur vrai pcap |
+| Étiquetage pcap + journal → dataset | `bfid/labeling.py` | ✅ (logique testée) |
+| Interface web (dashboard, visu, pcap) | `bfid/web/` | ✅ |
 | Scripts de capture | `scripts/` | ✅ |
 
 Détail et suite dans [`docs/ROADMAP.md`](docs/ROADMAP.md).
@@ -76,6 +78,41 @@ python -m bfid train --data dataset.npz
 
 `demo` doit afficher une accuracy nettement supérieure au hasard (~0.98 pour 5
 personnes synthétiques), preuve que parsing → features → ML s'enchaînent.
+
+## Interface web (banc de test)
+
+```bash
+pip install flask matplotlib
+python -m bfid web                 # http://127.0.0.1:5000
+```
+
+Trois onglets :
+- **Dashboard** : régler les paramètres, lancer l'évaluation, voir accuracy +
+  matrice de confusion + accuracy par fold. Mode **identification de
+  personnes** ou **localisation par zones** (fingerprinting).
+- **Signatures BFI** : visualiser à quoi ressemble la signature d'une
+  classe (heatmaps phi/psi temps × sous-porteuse).
+- **Analyse pcap** : importer une vraie capture `.pcap` (nécessite `scapy`).
+  En ajoutant un **journal CSV** d'étiquetage (`t_debut,t_fin,label`), l'app
+  étiquette et entraîne directement → c'est le branchement sur données réelles.
+
+> Outil **local** sans authentification : à n'exposer que sur `127.0.0.1`.
+
+### Localisation par zones — ce que ça fait vraiment
+
+Le mode « zones » illustre le **fingerprinting** : on apprend à reconnaître la
+**zone active** (pièce/secteur) à partir des BFI. Cela **ne dresse pas le plan**
+de la maison (l'imagerie RF demande du matériel dédié type radar/UWB) ; c'est
+de la **classification supervisée** de positions apprises au préalable. La
+résolution dépend du nombre de clients connectés à la box (= points de vue).
+
+## Étiquetage de vraies captures
+
+```bash
+# journal.csv :  t_debut,t_fin,label
+python -m bfid label --pcap capture.pcap --journal journal.csv --out dataset.npz
+python -m bfid train --data dataset.npz
+```
 
 ## Capture réelle (Phase 1+, sur votre réseau)
 
