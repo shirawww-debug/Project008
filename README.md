@@ -51,6 +51,37 @@ capture 802.11  ->  parsing angles BFI  ->  features  ->  modèle ML  ->  identi
 
 Détail et suite dans [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
+## Ce qu'on peut — et ne peut pas — savoir
+
+Cadrer les attentes : les BFI sont un **capteur de canal radio**, pas une caméra.
+
+**Solide** (démontré, robuste)
+- Présence / absence dans la zone couverte.
+- Comptage grossier (0, 1, quelques personnes).
+- Mouvement vs immobilité ; activité grossière (marche, parfois chute).
+- Rythme respiratoire/cardiaque au repos, à courte distance, sans obstacle.
+- Localisation **par zones apprises** (salon vs cuisine) — après entraînement
+  sur ces zones précises.
+
+**Fragile** (cadre fermé et stable requis)
+- Ré-identification de personnes (« Alice vs Bob ») : marche pour un ensemble
+  **fermé** de personnes, même lieu, position des box fixe, sur une fenêtre
+  courte. Se dégrade dès que l'environnement change. Ce n'est **pas** une
+  biométrie portable.
+- Gestes / activités fines : surtout en labo très contrôlé.
+
+**Hors de portée** (malgré les idées reçues)
+- ❌ « Voir à travers les murs » / dresser le plan du logement (demande un
+  radar mmWave/UWB, pas des BFI Wi-Fi).
+- ❌ Identifier un **inconnu** jamais enregistré (c'est du supervisé : il faut
+  des exemples étiquetés de chaque classe au préalable).
+- ❌ Lire l'écran, la frappe clavier, les paroles.
+- ❌ Suivre quelqu'un d'un réseau à l'autre / à travers la ville.
+
+En une phrase : **capteur de présence/mouvement/zone** puissant, et
+**ré-identificateur** uniquement en cadre fermé pré-entraîné. La résolution
+dépend du nombre de clients connectés à la box (chaque client = un point de vue).
+
 ## Installation
 
 ```bash

@@ -53,6 +53,9 @@ button[type=submit]:hover { filter: brightness(1.1); }
   background: var(--panel); border: 1px solid var(--border);
   border-radius: 10px; padding: 1rem; flex: 1 1 280px;
 }
+.card h3 { margin: 0 0 .5rem; font-size: 1rem; }
+.card ul { margin: 0; padding-left: 1.1rem; font-size: .85rem; }
+.card li { margin-bottom: .35rem; }
 .metric { font-size: 2rem; font-weight: 700; color: var(--accent); }
 .metric small { font-size: .9rem; color: var(--muted); font-weight: 400; }
 .hint { color: var(--muted); font-size: .85rem; max-width: 60ch; }

@@ -18,6 +18,7 @@
     <button class="tab active" data-tab="dashboard">Dashboard</button>
     <button class="tab" data-tab="signatures">Signatures BFI</button>
     <button class="tab" data-tab="pcap">Analyse pcap</button>
+    <button class="tab" data-tab="about">Capacités & limites</button>
   </nav>
 
   <!-- DASHBOARD -->
@@ -77,6 +78,47 @@
     </form>
     <div id="pcap-status" class="status"></div>
     <div id="pcap-result" class="result"></div>
+  </section>
+
+  <!-- ABOUT / CAPACITÉS -->
+  <section id="about" class="panel">
+    <h2>Ce qu'on peut — et ne peut pas — savoir</h2>
+    <p class="hint">Les BFI sont un <b>capteur de canal radio</b>, pas une caméra.
+      Cadre les attentes avant d'interpréter les résultats.</p>
+    <div class="result">
+      <div class="card">
+        <h3 style="color:#7ed492">✓ Solide</h3>
+        <ul>
+          <li>Présence / absence dans la zone couverte</li>
+          <li>Comptage grossier (0, 1, quelques personnes)</li>
+          <li>Mouvement vs immobilité ; activité grossière (marche, chute)</li>
+          <li>Rythme respiratoire au repos (courte distance, sans obstacle)</li>
+          <li>Localisation par <b>zones apprises</b> (après entraînement)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:#e0a93b">~ Fragile</h3>
+        <ul>
+          <li>Ré-identification (« Alice vs Bob ») : ensemble <b>fermé</b>, même
+            lieu, box fixes, fenêtre courte. Se dégrade si l'environnement
+            change. Pas une biométrie portable.</li>
+          <li>Gestes / activités fines : surtout en labo contrôlé</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:#f08a8a">✗ Hors de portée</h3>
+        <ul>
+          <li>« Voir à travers les murs » / dresser le plan du logement
+            (demande un radar mmWave/UWB)</li>
+          <li>Identifier un <b>inconnu</b> jamais enregistré (supervisé)</li>
+          <li>Lire l'écran, la frappe clavier, les paroles</li>
+          <li>Suivre quelqu'un d'un réseau à l'autre</li>
+        </ul>
+      </div>
+    </div>
+    <p class="hint">La résolution dépend du nombre de clients connectés à la box
+      (chaque client = un point de vue sur la pièce). Détails :
+      <code>README.md</code>, <code>docs/ETHICS.md</code>.</p>
   </section>
 
   <footer>bfid · reproduction pédagogique (BFId, KIT/KASTEL, CCS '25)</footer>
