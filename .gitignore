@@ -1,21 +1,15 @@
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-.eggs/
-build/
-dist/
-.pytest_cache/
-.venv/
-venv/
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
 
-# Données et captures — NE JAMAIS committer de données personnelles (RGPD).
-# Voir docs/ETHICS.md.
-*.pcap
-*.pcapng
-*.npz
-data/
-captures/
-datasets/
-*.pt
-*.pth
+# Logs / temporaire
+*.log
+tmp/
+.cache/
+
+# Variables d'environnement
+.env
+.env.local
